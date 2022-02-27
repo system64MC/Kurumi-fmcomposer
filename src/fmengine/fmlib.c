@@ -41,7 +41,7 @@
 #define REVERB_ALLPASS1 1.5*2508 // 7.7ms
 
 
-static float wavetable[8][LUTsize];
+static float wavetable[10][LUTsize];
 
 
 /* Exponential tables for envelopes and volumes scales */
@@ -104,7 +104,18 @@ static const unsigned int lfoWaveforms[28] = {
 
 float trg(float x, float theta) { return 1 - 2 * acos((1 - theta) * sin(2 * M_PI*x)) / M_PI; }
 
-float sqr(float x, float theta) { return 2 * atan(sin(2 * M_PI* x) / theta) / M_PI; }
+float sqrOld(float x, float theta) { return 2 * atan(sin(2 * M_PI* x) / theta) / M_PI; }
+
+float sqr(float x, float theta) 
+{ 
+
+	float tmp = (sin(2 * M_PI* x));
+	if(tmp < 0)
+		tmp = -1;
+	else if(tmp > 0)
+		tmp = 1;
+	return 2 * atan( tmp / theta) / M_PI; 
+}
 
 float swt(float x, float theta) { return (1 + trg((2 * x - 1) / 4, theta) * sqr(x / 2, theta)) / 2; }
 
@@ -194,6 +205,28 @@ fmsynth* fm_create(int _sampleRate)
 
 		for (unsigned i = 0; i < LUTsize; i++)
 			wavetable[7][i] = fast_rand() / 16383.5 - 0.5;
+		
+		float tmp;
+		for (unsigned i = 0; i < LUTsize; i++)
+		{
+			tmp = wavetable[0][i];			// absolute sine
+			if(tmp < 0)
+			tmp *= -1;
+			wavetable[8][i] = tmp;
+		}
+
+		
+		{										// quarter sine
+			for(unsigned i = 0; i < (LUTsize / 4); i++)
+				wavetable[9][i] = wavetable[8][i];
+			for(unsigned i = LUTsize / 4; i < (LUTsize / 2); i++)
+				wavetable[9][i] = 0;
+			for(unsigned i = LUTsize / 2; i < ((LUTsize / 4) + (LUTsize / 2)); i++)
+				wavetable[9][i] = wavetable[8][i];
+			for(unsigned i = ((LUTsize / 4) + (LUTsize / 2)); i < LUTsize; i++)
+				wavetable[9][i] = 0;
+		}
+						
 
 		/*for (int i = 0; i < 7; i++){
 			float max=0;

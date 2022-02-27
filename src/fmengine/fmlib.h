@@ -6,9 +6,9 @@ extern "C"{
 #define FMLIB_H
 
 	/* Number of channels (polyphony) */
-#define FM_ch 16
+#define FM_ch 24
 	/* Number of operators */
-#define FM_op 4
+#define FM_op 6
 
 
 	enum{ FM_NOTE, FM_INSTR, FM_VOL, FM_FXTYPE, FM_FXVALUE };

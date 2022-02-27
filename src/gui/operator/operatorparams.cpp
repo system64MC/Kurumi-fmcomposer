@@ -38,7 +38,7 @@ lfo("LFO", font, charSize)
 		DataSlider(321, 90, 127, -127, "Volume scale", 0, 150), // keyboard volume scaling
 		DataSlider(351, 180, 99, 0, "FM", 0, 59),
 		DataSlider(411, 180, 99, 0, "AM", 0, 60),
-		DataSlider(321, 5, 7, 0, "Wave", 0, 60),
+		DataSlider(321, 5, 9, 0, "Wave", 0, 60),
 
 		DataSlider(321, 110, 48, -48, "Attack", 0, 75), // envelope rate scaling
 		DataSlider(397, 110, 48, -48, "Decay", 0, 74),
@@ -46,7 +46,7 @@ lfo("LFO", font, charSize)
 		DataSlider(0, 110, 80, 0, "Hold", 0, 150), // hold
 		DataSlider(0, 50, 70, 0, "Delay", 0, 150), // delay
 		DataSlider(0, 70, 99, 0, "Initial level", 0, 150), // initial level
-		DataSlider(160, 70, 24, 0, "¼tone", 0, 75),
+		DataSlider(160, 70, 24, 0, "ï¿½tone", 0, 75),
 		DataSlider(321, 70, 120, 0, "Center note", 40, 150, 2), // envelope rate scaling
 		DataSlider(397, -900, 40, -40, "Pitch", 0, 74), // envelope rate scaling
 		DataSlider(160, 120, 99, -99, "Initial freq", 0, 150), // envelope rate scaling
@@ -62,7 +62,7 @@ lfo("LFO", font, charSize)
 		baseSize[i] = slider[i].width;
 	}
 
-
+	// 443 
 	waveform.setPosition(443, 0);
 	lfoOffsetBar.setPosition(waveform.getPosition().x + slider[24].value*36.0 / 32, waveform.getPosition().y + 6);
 	mode.setPosition(160, 30);
@@ -131,7 +131,7 @@ bool OpGUI::update()
 		selected=false;
 		modified= true;
 	}
-	waveform.setTextureRect(IntRect(810, 32 * slider[10].value, 36, 32));
+	waveform.setTextureRect(IntRect(882, 32 * slider[10].value, 36, 32));
 	lfoOffsetBar.setPosition(waveform.getPosition().x + slider[24].value*36.0 / 32, waveform.getPosition().y + 6);
 
 	itemsHovered = envLoop.hovered+mute.hovered+mute.hovered+fixedFreq.hovered;
