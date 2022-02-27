@@ -42,11 +42,15 @@ I chose only cross platform libraries for this project, and added #defines in my
 ## ... (to be defined)
 
 # Compiling
-The project compiles fine under Visual Studio 2013. You'll need the following additional libraries :
+I recommand you to use MSYS2 with the following libraries for compiling :
 - SFML
 - PortAudio
 - LAME
 - Xiph.org FLAC
+
+Once you installed them, create a "build" folder into the project folder, then, do cd build and then "cmake -DSFML_STATIC_LIBRARIES=TRUE -G "MSYS Makefiles" ..".
+After that, do "make" and it will build. if you have errors during make process, go to fmcomposer/src/libs/portmidi/ and delete everything with "linux" or "mac" in the name
+ptlinux.c, ptmacosx_cf.c, ptmacosx_mach.c and the whole linux subdirectory. After that, redo the cmake process and then make.
 
 For the release I modified slightly the SFML library to support file drop, get a crispier font rendering and support a missing keyboard key. You should still be able to compile with the official version if you comment the lines relative to file drop (the other changes i did doesn't impact the API)
 
