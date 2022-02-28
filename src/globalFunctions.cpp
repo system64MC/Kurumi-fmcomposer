@@ -27,7 +27,7 @@ extern Popup *popup;
 extern char songDefaultPath[256];
 void* callbackFunc;
 
-string windowTitle = "FM Composer - New song";
+string windowTitle = "Kurumi FM Composer (Mod by System64) - New song";
 extern Text notePreview;
 bool windowTooSmall;
 string lastSongOpened;
@@ -298,7 +298,7 @@ void songModified(int _modified)
 
 void setWindowTitle(string title)
 {
-	windowTitle = string("FM Composer - ") + title;
+	windowTitle = string("Kurumi FM Composer (Mod by System64) - ") + title;
 	window->setTitle(windowTitle);
 
 }

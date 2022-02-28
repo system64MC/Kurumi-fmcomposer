@@ -6,7 +6,7 @@ extern "C"{
 #define FMLIB_H
 
 	/* Number of channels (polyphony) */
-#define FM_ch 24
+#define FM_ch 18
 	/* Number of operators */
 #define FM_op 6
 
@@ -121,7 +121,8 @@ extern "C"{
 		float prevAmp, realAmp, ampTarget;
 		float	lfoFM, lfoAM;
 		float portaDestIncr;
-		unsigned char id, mult, baseVol, kbdCenterNote;
+		unsigned char id, baseVol, kbdCenterNote;
+		unsigned char mult;
 		char baseA, baseD;
 		char finetune, detune, fixedFreq, envLoop, pitchFinalRatio;
 		float velSensitivity, volScaling;

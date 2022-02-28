@@ -451,12 +451,13 @@ void SongEditor::updateMutedChannels()
 
 void SongEditor::setXscroll(int value, bool updateSlider)
 {
-	scrollXsmooth=clamp(value,0,FM_ch*CH_WIDTH - ((int)(windowWidth - 231))+32*zoom);
+	scrollXsmooth=clamp(value,0,FM_ch*CH_WIDTH - ((int)(windowWidth - 462))+32*zoom);
+	// scrollXsmooth = 0;
 	scrollX = scrollXsmooth/CH_WIDTH;
 	scrollX2 = min(FM_ch, scrollX + (windowWidth - 231) / CH_WIDTH + 2);
 
-	patternView.setCenter((float)windowWidth / 2 + scrollXsmooth, patternView.getCenter().y);
-	patternTopView.setCenter((float)windowWidth / 2 + scrollXsmooth, (float)windowHeight / 2 - 85);
+	patternView.setCenter((float)windowWidth -windowWidth / 2 + scrollXsmooth, patternView.getCenter().y);
+	patternTopView.setCenter((float)windowWidth -windowWidth / 2 + scrollXsmooth, (float)windowHeight / 2 - 85);
 
 
 	if (updateSlider)
@@ -579,7 +580,7 @@ void SongEditor::setX(int channel)
 	selection.bg.setSize(Vector2f(COL_WIDTH, ROW_HEIGHT));
 	selection.bg.setPosition(selectedChannel*CH_WIDTH + selectedType*COL_WIDTH, fm->row*ROW_HEIGHT);
 	updateRecordChannels();
-	setXscroll((selectedChannel - ((int)windowWidth - 215 - 32) / CH_WIDTH / 2)*CH_WIDTH);
+	setXscroll((selectedChannel - ((int)windowWidth - 430 - 32) / CH_WIDTH / 1)*CH_WIDTH);
 }
 
 void SongEditor::moveXrelative(int offset)
@@ -655,7 +656,7 @@ void SongEditor::moveCursorAfterDataEntered()
 void SongEditor::setZoom(float _zoom)
 {
 	/* This rounding is done to avoid float imprecision leading to x.x9999 values sometimes... so we round to 1 digit precision */
-	zoom = clamp(round(_zoom*10)*0.1, 0.7, 1.5);
+	zoom = clamp(round(_zoom*10)*0.1, 0.8, 1.6);
 	int selectionW = (int)round(selection.bg.getSize().x / COL_WIDTH);
 	int selectionH = (int)round(selection.bg.getSize().y / ROW_HEIGHT);
 

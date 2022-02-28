@@ -35,7 +35,7 @@ samplerate(420, 280, 5, 0, "Sample Rate (hz)", 3, 170),
 sampleRateError("", font, charSize),
 openLastSong(14, 510, "Reopen last song")
 , themeFile(420, 400, 20, "Theme file : themes/"),
-themeText(" (restart FM Composer to apply changes)", font, charSize),
+themeText(" (restart Kurumi FM Composer to apply changes)", font, charSize),
 midiImport("MIDI import", font, charSize),
 subquantize(14, 310, "Preserve unquantized notes"),
 approvedSampleRate(-1), approvedDeviceId(-1),
