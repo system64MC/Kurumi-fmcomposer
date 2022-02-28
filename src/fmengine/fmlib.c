@@ -41,7 +41,7 @@
 #define REVERB_ALLPASS1 1.5*2508 // 7.7ms
 
 
-static float wavetable[12][LUTsize];
+static float wavetable[16][LUTsize];
 
 
 /* Exponential tables for envelopes and volumes scales */
@@ -82,7 +82,7 @@ static const unsigned int lfoWaveforms[28] = {
 	4,
 	5,
 	6,
-	7,
+	15,
 	0,  // less reso
 	0,  // less reso
 	0,  // less
@@ -230,14 +230,93 @@ fmsynth* fm_create(int _sampleRate)
 			wavetable[7][i] = derSquareLUT[i];
         }
 
-		for (unsigned i = 0; i < LUTsize; i++)
-			wavetable[8][i] = (swt((float)(i + LUTsize / 2) / LUTsize, 0.2) - 0.5)*2.5*(1 / 0.464670);	// 3 soft saw
+		
+
+		{	// OPZ 2
+			int tmp2 = 0;
+			for(unsigned i = ((LUTsize / 4) + (LUTsize / 2)); i < LUTsize; i++)
+			{
+				wavetable[8][tmp2] = wavetable[0][i] + 1;
+				tmp2++;
+			}
+
+			for(unsigned i = (LUTsize / 2); i < ((LUTsize / 4) + (LUTsize / 2)); i++)
+			{
+				wavetable[8][tmp2] = wavetable[0][i] + 1;
+				tmp2++;
+			}
+
+			for(unsigned i = (LUTsize / 4); i < (LUTsize / 2); i++)
+			{
+				wavetable[8][tmp2] = wavetable[0][i] - 1;
+				tmp2++;
+			}
+
+			for(unsigned i = 0; i < (LUTsize / 4); i++)
+			{
+				wavetable[8][tmp2] = wavetable[0][i] - 1;
+				tmp2++;
+			}
+		}
+
+		for(unsigned i = 0; i < LUTsize; i++) // OPZ 4
+		{
+			if(i < LUTsize / 2)
+				wavetable[9][i] = wavetable[8][i];
+			else
+				wavetable[9][i] = 0;
+		}
+
+		{	// OPZ 6
+			int tmp2 = 0;
+			for(unsigned i = ((LUTsize / 8) + (LUTsize / 4)); i < LUTsize / 2; i++)
+			{
+				wavetable[10][tmp2] = wavetable[4][i] + 1;
+				tmp2++;
+			}
+
+			for(unsigned i = (LUTsize / 4); i < ((LUTsize / 8) + (LUTsize / 4)); i++)
+			{
+				wavetable[10][tmp2] = wavetable[4][i] + 1;
+				tmp2++;
+			}
+
+			for(unsigned i = (LUTsize / 8); i < (LUTsize / 4); i++)
+			{
+				wavetable[10][tmp2] = wavetable[4][i] - 1;
+				tmp2++;
+			}
+
+			for(unsigned i = 0; i < (LUTsize / 8); i++)
+			{
+				wavetable[10][tmp2] = wavetable[4][i] - 1;
+				tmp2++;
+			}
+
+			for(unsigned i = LUTsize / 2; i < LUTsize; i++)
+			{
+				wavetable[10][i] = 0;
+			}
+		}
+
+		// OPZ 8
+
+		for(unsigned i = 0; i < LUTsize; i++)
+		{
+			if(i < LUTsize / 4)
+				wavetable[11][i] = wavetable[10][i];
+			else
+				wavetable[11][i] = -wavetable[10][i];
+		}
 
 		for (unsigned i = 0; i < LUTsize; i++)
-			wavetable[9][i] = (swt((float)(i + LUTsize / 2) / LUTsize, 0.05) - 0.5) * 2 * (1 / 0.649969);	// 4 saw
+			wavetable[12][i] = (swt((float)(i + LUTsize / 2) / LUTsize, 0.2) - 0.5)*2.5*(1 / 0.464670);	// 3 soft saw
 
 		for (unsigned i = 0; i < LUTsize; i++)
-			wavetable[10][i] = trg((float)i / LUTsize, 0.01)*(1 / 0.909893);			// 1 triangle
+			wavetable[13][i] = (swt((float)(i + LUTsize / 2) / LUTsize, 0.05) - 0.5) * 2 * (1 / 0.649969);	// 4 saw
+
+		for (unsigned i = 0; i < LUTsize; i++)
+			wavetable[14][i] = trg((float)i / LUTsize, 0.01)*(1 / 0.909893);			// 1 triangle
 
 		
 
@@ -246,7 +325,7 @@ fmsynth* fm_create(int _sampleRate)
 		
 
 		for (unsigned i = 0; i < LUTsize; i++)	
-			wavetable[11][i] = fast_rand() / 16383.5 - 0.5;
+			wavetable[15][i] = fast_rand() / 16383.5 - 0.5;
 
 		
 		

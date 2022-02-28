@@ -38,7 +38,7 @@ lfo("LFO", font, charSize)
 		DataSlider(321, 90, 127, -127, "Volume scale", 0, 150), // keyboard volume scaling
 		DataSlider(351, 180, 99, 0, "FM", 0, 59),
 		DataSlider(411, 180, 99, 0, "AM", 0, 60),
-		DataSlider(321, 5, 11, 0, "Wave", 0, 60),
+		DataSlider(321, 5, 15, 0, "Wave", 0, 60),
 
 		DataSlider(321, 110, 48, -48, "Attack", 0, 75), // envelope rate scaling
 		DataSlider(397, 110, 48, -48, "Decay", 0, 74),
