@@ -29,7 +29,7 @@ lfo("LFO", font, charSize)
 	view.setCenter(x, y);
 	slider.insert(slider.end(), {
 		DataSlider(180, 5, 99, 0, "Volume", 99, 130),
-		DataSlider(160, 50, 80, 0, "Mult", 1, 150), // mult
+		DataSlider(160, 50, 40, 0, "Mult", 1, 150), // mult
 		DataSlider(236, 70, 100, -100, "Fine", 0, 74), // detune
 		DataSlider(0, 90, 99, 1, "Attack", 99, 150), // a
 		DataSlider(20, 130, 99, 0, "Decay", 38, 130), // d
@@ -38,7 +38,7 @@ lfo("LFO", font, charSize)
 		DataSlider(321, 90, 127, -127, "Volume scale", 0, 150), // keyboard volume scaling
 		DataSlider(351, 180, 99, 0, "FM", 0, 59),
 		DataSlider(411, 180, 99, 0, "AM", 0, 60),
-		DataSlider(321, 5, 15, 0, "Wave", 0, 60),
+		DataSlider(321, 5, 33, 0, "Wave", 0, 60),
 
 		DataSlider(321, 110, 48, -48, "Attack", 0, 75), // envelope rate scaling
 		DataSlider(397, 110, 48, -48, "Decay", 0, 74),
@@ -76,7 +76,7 @@ lfo("LFO", font, charSize)
 	scalings.setColor(colors[SUBTITLE]);
 	lfo.setPosition(320, 180);
 	lfo.setColor(colors[SUBTITLE]);
-	slider[1].setMinMax(0, 80);
+	slider[1].setMinMax(0, 40);
 }
 
 int OpGUI::hover()
@@ -126,7 +126,7 @@ bool OpGUI::update()
 		else
 		{
 			slider[1].name.setString("Ratio");
-			slider[1].setMinMax(0, 80);
+			slider[1].setMinMax(0, 40);
 			fixedFreq.setText("Ratio");
 		}
 		selected=false;

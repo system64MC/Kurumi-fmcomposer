@@ -122,7 +122,7 @@ extern "C"{
 		float	lfoFM, lfoAM;
 		float portaDestIncr;
 		unsigned char id, baseVol, kbdCenterNote;
-		unsigned char mult;
+		float mult;
 		char baseA, baseD;
 		char finetune, detune, fixedFreq, envLoop, pitchFinalRatio;
 		float velSensitivity, volScaling;

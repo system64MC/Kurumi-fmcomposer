@@ -17,7 +17,7 @@ void InstrEditor::updateFromFM()
 		else
 		{
 			op[i].slider[1].name.setString("Mult");
-			op[i].slider[1].setMinMax(0, 80);
+			op[i].slider[1].setMinMax(0, 40);
 			op[i].fixedFreq.setText("Ratio");
 		}
 

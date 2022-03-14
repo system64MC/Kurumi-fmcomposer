@@ -40,8 +40,13 @@
 #define REVERB_ALLPASS2 1.5*1170 // 5.5
 #define REVERB_ALLPASS1 1.5*2508 // 7.7ms
 
+double cot(double x)
+{
+	return cos(x) / sin(x);
+}
 
-static float wavetable[16][LUTsize];
+
+static float wavetable[34][LUTsize];
 
 
 /* Exponential tables for envelopes and volumes scales */
@@ -324,8 +329,227 @@ fmsynth* fm_create(int _sampleRate)
 
 		
 
-		for (unsigned i = 0; i < LUTsize; i++)	
+		for (unsigned i = 0; i < LUTsize; i++)			// NOISE
 			wavetable[15][i] = fast_rand() / 16383.5 - 0.5;
+
+		for(unsigned i = 0; i < LUTsize; i++) // HALF SQUARE
+		{
+			if(i < LUTsize / 2)
+				wavetable[16][i] = wavetable[6][i];
+			else
+				wavetable[16][i] = 0;
+		}
+
+		for(unsigned i = 0; i < LUTsize; i++) // HALF TRIANGLE
+		{
+			if(i < LUTsize / 2)
+				wavetable[17][i] = wavetable[14][i];
+			else
+				wavetable[17][i] = 0;
+		}
+
+		for(unsigned i = 0; i < LUTsize; i++) // ABSOLUTE TRIANGLE
+		{
+			if( wavetable[14][i] > 0)
+				wavetable[18][i] = wavetable[14][i];
+			else if( wavetable[14][i] < 0)
+				wavetable[18][i] = - wavetable[14][i];
+		}
+
+		for(unsigned i = 0; i < LUTsize; i++) // QUARTER TRIANGLE
+		{
+			if(i < (LUTsize / 4) || ((i >= LUTsize / 2) && (i < (LUTsize / 4) + (LUTsize / 2))))
+				wavetable[19][i] = wavetable[18][i];
+			else if( wavetable[14][i] < 0)
+				wavetable[19][i] = 0;
+		}
+
+		for (unsigned i = 0; i < LUTsize; i++)	// 5 double triangle
+		{
+			if(i < LUTsize / 2)
+				wavetable[20][i] = (2/M_PI) * asin(sin((2 * M_PI * i)/(LUTsize/2)));				
+			else
+				wavetable[20][i] = 0;
+		}
+
+		for(unsigned i = 0; i < LUTsize; i++) // DOUBLE ABSOLUTE TRIANGLE
+		{
+			if(wavetable[20][i] < 0)
+				wavetable[21][i] = -wavetable[20][i];
+			else
+				wavetable[21][i] = -wavetable[20][i];
+		}
+
+		for(unsigned i = 0; i < LUTsize; i++) // SAW 3
+		{
+			wavetable[22][i] = -(2/M_PI) * atan(cot(((LUTsize/2) * M_PI + (M_PI * i))/(LUTsize)));					
+		}
+
+		for(unsigned i = 0; i < LUTsize; i++) // HALF SAW
+		{
+			if(i < LUTsize / 2)
+				wavetable[23][i] = wavetable[22][i];
+			else
+				wavetable[23][i] = 0;
+		}
+
+		for(unsigned i = 0; i < LUTsize; i++) // ABS SAW
+		{
+			if(wavetable[22][i] < 0)
+				wavetable[24][i] = wavetable[22][i] + 1;
+			else
+				wavetable[24][i] = wavetable[22][i];
+		}
+
+		for(unsigned i = 0; i < LUTsize; i++) // DOUBLE SAW
+		{
+			if(i < LUTsize / 2)
+				wavetable[25][i] = -(2/M_PI) * atan(cot(((LUTsize/4) * M_PI + (M_PI * i))/(LUTsize/2)));	
+			else
+				wavetable[25][i] = 0;
+		}
+
+		for(unsigned i = 0; i < LUTsize; i++) // ABS SAW 2
+		{
+			if(wavetable[25][i] < 0)
+				wavetable[26][i] = wavetable[25][i] + 1;
+			else
+				wavetable[26][i] = wavetable[25][i];
+		}
+
+		for(unsigned i = 0; i < LUTsize; i++) // HALF 25% PULSE
+		{
+			if(i < LUTsize / 4)
+				wavetable[27][i] = 1;
+			else
+				wavetable[27][i] = 0;
+		}
+
+		// for(unsigned i = 0; i < LUTsize; i++) // DOUBLE HALF SQUARE
+		// {
+		// 	if(i < LUTsize / 4 || (LUTsize / 4) || ((i >= LUTsize / 2) && (i < (LUTsize / 4) + (LUTsize / 2))))
+		// 		wavetable[28][i] = 1;
+		// 	else
+		// 		wavetable[28][i] = 0;
+		// }
+
+		{			// DOUBLE HALF SQUARE
+			for(unsigned i = 0; i < LUTsize / 4; i++)
+			{
+				wavetable[28][i] = 1;
+			}
+
+			for(unsigned i = LUTsize / 4; i < LUTsize / 2; i++)
+			{
+				wavetable[28][i] = 0;
+			}
+
+			for(unsigned i = LUTsize / 2; i < ((LUTsize / 2) + (LUTsize / 4)); i++)
+			{
+				wavetable[28][i] = 1;
+			}
+
+			for(unsigned i = ((LUTsize / 2) + (LUTsize / 4)); i < LUTsize; i++)
+			{
+				wavetable[28][i] = 0;
+			}
+		}
+
+		for(unsigned i = 0; i < LUTsize; i++)	// 25% PULSE
+		{
+			if(i < LUTsize / 4)
+				wavetable[29][i] = 1;
+			else
+				wavetable[29][i] = -1;
+		}
+
+		for(unsigned i = 0; i < LUTsize; i++)	// 12.5% PULSE
+		{
+			if(i < LUTsize / 8)
+				wavetable[30][i] = 1;
+			else
+				wavetable[30][i] = -1;
+		}
+
+		for(unsigned i = 0; i < LUTsize; i++)	// 6.25% PULSE
+		{
+			if(i < LUTsize / 16)
+				wavetable[31][i] = 1;
+			else
+				wavetable[31][i] = -1;
+		}
+
+		for(unsigned i = 0; i < LUTsize; i++)	// 1-BIT NOISE
+		{
+			wavetable[32][i] = fast_rand();
+			if(wavetable[32][i] < 0)
+				wavetable[32][i] = -1;
+			else
+				wavetable[32][i] = 1;
+		}
+
+		for(unsigned i = 0; i < LUTsize; i++)	// CUBED SINE
+		{
+			wavetable[33][i] = pow(wavetable[0][i], 3);
+		}
+
+		// float temp = 0;
+		// float temp2 = 0;
+		// for(unsigned i = 0; i < LUTsize; i++)	// ROUNDED SQUARE
+		// {
+		// 	temp = sin(((i * M_PI) / (LUTsize / 2)));
+		// 	temp2 = powf(temp, (1.0f/7)) / 1;
+		// 	// if(temp2 > 1)
+		// 	// 	printf("%6.6f\n", temp2);
+		// 	wavetable[29][i] = temp2;
+		// }
+
+		// for(unsigned i = 0; i < LUTsize; i++)	// HALF ROUNDED SQUARE
+		// {
+		// 	if(i < LUTsize / 2)
+		// 		wavetable[30][i] = wavetable[29][i];
+		// 	else
+		// 		wavetable[30][i] = 0;
+		// }
+
+		// for(unsigned i = 0; i < LUTsize; i++) // ABSOLUTE ROUNDED SQUARE
+		// {
+		// 	if(wavetable[29][i] < 0)
+		// 		wavetable[31][i] = -wavetable[29][i];
+		// 	else
+		// 	{
+		// 		wavetable[31][i] = wavetable[29][i];
+		// 	}
+		// }
+
+		// for(unsigned i = 0; i < LUTsize; i++) // QUARTER ROUNDED SQUARE
+		// {
+		// 	if(i < (LUTsize / 4) || ((i >= LUTsize / 2) && (i < (LUTsize / 4) + (LUTsize / 2))))
+		// 		wavetable[32][i] = wavetable[31][i];
+		// 	else
+		// 		wavetable[32][i] = 0;
+		// }
+
+		// for(unsigned i = 0; i < LUTsize; i++)	// DOUBLE ROUNDED SQUARE
+		// {
+		// 	if(i < LUTsize / 2)
+		// 		wavetable[33][i] = pow(1.0f/7, sin((i * M_PI) / (LUTsize / 4))) / 7;
+		// 	else
+		// 		wavetable[33][i] = 0;
+		// }
+
+		// for(unsigned i = 0; i < LUTsize; i++) // ABS DOUBLE ROUNDED SQUARE
+		// {
+		// 	if(wavetable[33][i] < 0)
+		// 		wavetable[34][i] = -wavetable[33][i];
+		// 	else
+		// 		wavetable[34][i] = wavetable[33][i];
+		// }
+
+
+			
+
+
 
 		
 		
@@ -517,6 +741,18 @@ void fm_initChannels(fmsynth* f)
 
 void _fm_render(fmsynth* f, float* buffer, unsigned length)
 {
+	for (unsigned i = 0; i < LUTsize; i++)	
+			wavetable[15][i] = fast_rand() / 16383.5 - 0.5;
+
+	for(unsigned i = 0; i < LUTsize; i++)	// 1-BIT NOISE
+		{
+			wavetable[32][i] = fast_rand() / 16383.5 - 0.5;
+			if(wavetable[32][i] < 0)
+				wavetable[32][i] = -1;
+			else
+				wavetable[32][i] = 1;
+			// printf("%f\n", wavetable[32][i]);
+		}
 
 	unsigned b = 0;
 	while (b < length)
@@ -684,7 +920,7 @@ void _fm_render(fmsynth* f, float* buffer, unsigned length)
 										o->waveform = wavetable[clamp(f->ch[ch].fxData, 0, 7)];
 										break;
 									case 3:{
-											   o->mult = clamp(f->ch[ch].fxData, 0, 80);
+											   o->mult = clamp(f->ch[ch].fxData, 0.5, 40);
 											   float frequency = f->noteIncr[f->ch[ch].note] + f->noteIncr[f->ch[ch].note] * SEMITONE_RATIO * f->ch[ch].instr->temperament[f->ch[ch].note % 12];
 											   o->incr = frequency *(o->mult + (float)o->finetune*_24TO1 + (float)o->detune*_2400TO1) * (1 + f->ch[ch].tuning);
 											   break;
@@ -1226,7 +1462,12 @@ void fm_playNote(fmsynth* f, unsigned _instrument, unsigned note, unsigned ch, u
 
 			o->finetune = f->ch[ch].instr->op[op].finetune;
 			o->detune = f->ch[ch].instr->op[op].detune;
+			if(f->ch[ch].instr->op[op].mult < 0.5)
+				o->mult = 0.5;
 			o->mult = f->ch[ch].instr->op[op].mult;
+			if(o->mult < 0.5)
+				o->mult = 0.5;
+			// printf("%f\n", o->mult);
 			o->baseVol = f->ch[ch].instr->op[op].vol * !f->ch[ch].instr->op[op].muted;
 			o->baseA = f->ch[ch].instr->op[op].a;
 			o->baseD = f->ch[ch].instr->op[op].d;
@@ -1740,7 +1981,7 @@ void fm_instrumentRecovery(fm_instrument * i)
 		if (i->op[op].fixedFreq)
 			i->op[op].mult = clamp(i->op[op].mult, 0, 255);
 		else
-			i->op[op].mult = clamp(i->op[op].mult, 0, 80);
+			i->op[op].mult = clamp(i->op[op].mult, 0.5, 40);
 		i->op[op].finetune = clamp(i->op[op].finetune, 0, 24);
 		i->op[op].detune = clamp(i->op[op].detune, -100, 100);
 		i->op[op].waveform = clamp(i->op[op].waveform, 0, 7);
